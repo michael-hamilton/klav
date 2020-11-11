@@ -11,12 +11,21 @@ class Klav {
 	}
 
 	init() {
-		this.keyboard.innerHTML = this.buildKeyboard(4, 2);
+		this.buildKeyboard();
+		window.addEventListener('resize', () => this.buildKeyboard());
+	}
+
+	// Builds a keyboard that fits within the screen
+	buildKeyboard() {
+		const keybed = this.keyboard.getElementsByClassName('keybed');
+		const octaves = window.innerWidth / (window.innerWidth < 800 ? 600 : 500);
+		keybed[0].innerHTML = this.generateKeys(octaves, window.innerWidth < 800 ? 3 : 2);
+		this.keyboard.style.display = '';
 		this.initKeyListeners();
 	}
 
-	// Builds a keyboard with a set number of octaves beginning at an optional start octave
-	buildKeyboard(octaves, startOctave = 1) {
+	// Generates n octaves of keys beginning at a start octave
+	generateKeys(octaves, startOctave = 1) {
 		let tmpKeyboard = ``;
 		for (let octave = 0 ; octave < octaves; octave++) {
 			let tmpKeys = ``;
@@ -36,13 +45,18 @@ class Klav {
 	initKeyListeners() {
 		const keys = this.keyboard.getElementsByClassName('key');
 
-		Array.from(keys).forEach((key) => {
-			key.addEventListener('mousedown', (e) => {
-				const octave = e.target.getAttribute('data-octave');
-				const note = e.target.getAttribute('data-note');
+		const handlePlay = key => {
+			const octave = key.getAttribute('data-octave');
+			const note = key.getAttribute('data-note')
 
-				this.playNote(note, octave, '16n');
-			});
+			key.classList.add('active')
+			this.playNote(note, octave, '16n');
+		}
+
+		Array.from(keys).forEach((key) => {
+			key.addEventListener('mousedown', e => handlePlay(key));
+			key.addEventListener('mouseup', e => key.classList.remove('active'));
+			key.addEventListener('mouseout', e => key.classList.remove('active'));
 		});
 	}
 

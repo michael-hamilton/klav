@@ -1,0 +1,152 @@
+// klav styles
+
+$black-key-width: 24px;
+$black-key-margin: 2px;
+$white-key-width: 38px;
+$white-key-margin: 1px;
+$keybed-height: 135px;
+$keyboard-height: 250px;
+
+*, * * {
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+
+html, body {
+	height: 100%;
+	overflow: hidden;
+	width: 100%;
+}
+
+.container {
+	align-items: center;
+	background-color: #373737;
+	display: flex;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
+}
+
+.keyboard {
+	align-items: center;
+	background: #1e5399;
+	background: -moz-linear-gradient(top,  #1e5399 0%, #2c76a9 100%);
+	background: -webkit-linear-gradient(top,  #1e5399 0%,#2c76a9 100%);
+	background: linear-gradient(to bottom,  #1e5399 0%,#2c76a9 100%);
+	border-radius: 4px;
+	box-shadow: 0 0px 20px -10px #000;
+	display: flex;
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5399', endColorstr='#3595d6',GradientType=0 );
+	flex-direction: column;
+	justify-content: space-between;
+	padding: 10px 20px;
+	height: $keyboard-height;
+	position: relative;
+
+	.control-wrapper {
+		box-shadow: 0 10px 10px -10px #000;
+		display: flex;
+		flex: 1;
+		justify-content: center;
+		padding: 10px;
+		width: 98%;
+		z-index: 10;
+
+		.logo {
+			color: white;
+			font-family: sans-serif;
+			font-weight: 100;
+			left: 0;
+			position: absolute;
+		}
+
+		.screen {
+			align-items: center;
+			align-self: center;
+			background-color: #28b52f;
+			box-shadow: 0 0 8px -2px #000 inset;
+			display: flex;
+			justify-content: center;
+			height: 50px;
+			width: 100px;
+
+			p {
+				color: black;
+				font-family: monospace;
+			}
+		}
+	}
+
+	.keybed {
+		background-color: #373737;
+		box-shadow: 0 10px 10px -10px #000;
+		height: $keybed-height;
+		align-self: flex-end;
+
+		.octave {
+			display: inline-block;
+			height: 100%;
+			position: relative;
+
+			&:first-child {
+				.key {
+					&.white {
+						&:first-child {
+							border-left: 1px solid #888888;
+						}
+					}
+				}
+			}
+		}
+
+		.key {
+			border-radius: 0 0 3px 3px;
+			cursor: pointer;
+			display: inline-block;
+			top: 0;
+
+			&.white {
+				background-color: white;
+				border-bottom: 1px solid #888888;
+				border-right: 1px solid #888888;
+				border-top: 1px solid #888888;
+				height: 100%;
+				position: relative;
+				width: $white-key-width;
+
+				&.active {
+					box-shadow: 0 4px 7px -1px #373737 inset;
+					margin: 0 $white-key-margin;
+					width: $white-key-width - $white-key-margin * 2;
+				}
+
+				&:hover {
+					background-color: #eeeeee;
+				}
+			}
+
+			&.black {
+				background-color: black;
+				margin-left: -12px;
+				height: 75%;
+				position: absolute;
+				width: $black-key-width;
+				z-index: 1;
+
+				&.active {
+					margin: 0 $black-key-margin 0 -11px;
+					width: $black-key-width - $black-key-margin;
+				}
+
+				&:hover {
+					background-color: #373737;
+				}
+			}
+
+			&:hover {
+				transition: .06125s background-color;
+			}
+		}
+	}
+}

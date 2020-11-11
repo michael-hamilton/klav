@@ -2,12 +2,20 @@
 <html>
 <head>
 	<title>klav</title>
-	<link rel="stylesheet" type="text/css" href="./klav.css">
+	<link rel="stylesheet" type="text/css" href="./klav.scss">
 </head>
 
 <body>
 	<div class='container'>
-		<div id="keyboard" class="keyboard"></div>
+		<div id="keyboard" class="keyboard" style="display: none">
+			<div class="control-wrapper">
+				<h1 class="logo">klav</h1>
+				<div class="screen">
+					<p>001 - boop</p>
+				</div>
+			</div>
+			<div class="keybed"></div>
+		</div>
 	</div>
 
 	<script src="./klav.js"></script>
