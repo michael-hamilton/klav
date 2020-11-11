@@ -1,4 +1,4 @@
-# klav
+# [klav](http://miska.me/projects/klav/klav.html)
 
 klav is an experiment with [Tone.js](https://tonejs.github.io/), and a project to have some fun with CSS.
 
