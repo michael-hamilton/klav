@@ -6,47 +6,48 @@ class Klav {
 	static whiteKeyIndexes = [0, 2, 4, 5, 7, 9, 11];
 
 	constructor(keyboard) {
-		this.synth = new Tone.Synth().toDestination();
 		this.keyboard = keyboard;
+		this.synth = new Tone.Synth().toDestination();
 	}
 
 	init() {
-		this.buildKeyboard(this.keyboard, 4, 2);
+		this.keyboard.innerHTML = this.buildKeyboard(4, 2);
 		this.initKeyListeners();
 	}
 
-	//Build a keyboard by taking a jQuery selector for the keyboard, number of octave, and start octave
-	buildKeyboard(keyboard, octaves, startOctave) {
+	// Builds a keyboard with a set number of octaves beginning at an optional start octave
+	buildKeyboard(octaves, startOctave = 1) {
 		let tmpKeyboard = ``;
 		for (let octave = 0 ; octave < octaves; octave++) {
 			let tmpKeys = ``;
 
-			for (let noteIndex = 0; noteIndex < Klav.notes.length; noteIndex++) {
-				let keyClass = Klav.whiteKeyIndexes.includes(noteIndex) ? 'white' : 'black';
-				tmpKeys += `<div class="key ${keyClass}" data-octave="${octave + startOctave}" data-note="${Klav.notes[noteIndex]}"></div>`;
-			}
+			this.constructor.notes.forEach((note, index) => {
+				let keyClass = this.constructor.whiteKeyIndexes.includes(index) ? 'white' : 'black';
+				tmpKeys += `<div class="key ${keyClass}" data-octave="${octave + startOctave}" data-note="${this.constructor.notes[index]}"></div>`;
+			});
 
 			tmpKeyboard += `<div class="octave" data-octave="${octave + startOctave}">${tmpKeys}</div>`
 		}
 
-		keyboard.innerHTML = tmpKeyboard;
+		return tmpKeyboard;
 	}
 
-	//Listens for clicks on keyboard keys and calls function to play sound
+	//Listens for presses on keyboard keys and plays the respective note
 	initKeyListeners() {
 		const keys = this.keyboard.getElementsByClassName('key');
+
 		Array.from(keys).forEach((key) => {
-			key.addEventListener('click', (e) => {
+			key.addEventListener('mousedown', (e) => {
 				const octave = e.target.getAttribute('data-octave');
 				const note = e.target.getAttribute('data-note');
 
-				this.playSound(note, octave, '16n');
+				this.playNote(note, octave, '16n');
 			});
 		});
 	}
 
-	//Plays a sound with provided note, octave, and duration
-	playSound(note, octave, duration) {
+	//Plays a note for a duration at a specified octave
+	playNote(note, octave, duration) {
 		this.synth.triggerAttackRelease(note+octave, duration);
 	}
 }
