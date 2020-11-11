@@ -1,45 +1,55 @@
-var Klav = {
+// Klav
+import * as Tone from 'tone';
 
-	synth: new Tone.Synth().toMaster(),
-	notes: ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
-	whiteKeyIndexes: [0, 2, 4, 5, 7, 9, 11],
+class Klav {
+	static notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+	static whiteKeyIndexes = [0, 2, 4, 5, 7, 9, 11];
 
-	init: function() {
-		Klav.buildKeyboard($('#keyboard'), 4, 2);
-		Klav.initKeyListeners();
-	},
+	constructor(keyboard) {
+		this.synth = new Tone.Synth().toDestination();
+		this.keyboard = keyboard;
+	}
+
+	init() {
+		this.buildKeyboard(this.keyboard, 4, 2);
+		this.initKeyListeners();
+	}
 
 	//Build a keyboard by taking a jQuery selector for the keyboard, number of octave, and start octave
-	buildKeyboard: function(keyboard, octaves, startOctave) {
-		var tmpKeyboard = ``;
-		for (var octave = 0 ; octave < octaves; octave++) {
-			var tmpKeys = ``;
+	buildKeyboard(keyboard, octaves, startOctave) {
+		let tmpKeyboard = ``;
+		for (let octave = 0 ; octave < octaves; octave++) {
+			let tmpKeys = ``;
 
-			for (var noteIndex = 0; noteIndex < Klav.notes.length; noteIndex++) {
-				var keyClass = Klav.whiteKeyIndexes.includes(noteIndex) ? 'white' : 'black';
-				tmpKeys += `<div class="key ${keyClass}" data-note="${Klav.notes[noteIndex]}"></div>`;
+			for (let noteIndex = 0; noteIndex < Klav.notes.length; noteIndex++) {
+				let keyClass = Klav.whiteKeyIndexes.includes(noteIndex) ? 'white' : 'black';
+				tmpKeys += `<div class="key ${keyClass}" data-octave="${octave + startOctave}" data-note="${Klav.notes[noteIndex]}"></div>`;
 			}
 
 			tmpKeyboard += `<div class="octave" data-octave="${octave + startOctave}">${tmpKeys}</div>`
 		}
 
-		keyboard.html(tmpKeyboard);
-	},
+		keyboard.innerHTML = tmpKeyboard;
+	}
 
 	//Listens for clicks on keyboard keys and calls function to play sound
-	initKeyListeners: function () {
-		$('.key').click(function() {
-			var octave = $(this).closest('.octave').data('octave'),
-					note = $(this).data('note');
+	initKeyListeners() {
+		const keys = this.keyboard.getElementsByClassName('key');
+		Array.from(keys).forEach((key) => {
+			key.addEventListener('click', (e) => {
+				const octave = e.target.getAttribute('data-octave');
+				const note = e.target.getAttribute('data-note');
 
-			Klav.playSound(note, octave, '16n');
+				this.playSound(note, octave, '16n');
+			});
 		});
-	},
+	}
 
 	//Plays a sound with provided note, octave, and duration
-	playSound: function (note, octave, duration) {
-		Klav.synth.triggerAttackRelease(note+octave, duration);
+	playSound(note, octave, duration) {
+		this.synth.triggerAttackRelease(note+octave, duration);
 	}
-};
+}
 
-$(document).ready(Klav.init);
+const K = new Klav(document.getElementById('keyboard'));
+K.init();
