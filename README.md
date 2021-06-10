@@ -12,4 +12,4 @@ Released under the MIT license - do whatever you wish with it.
 
 
 ## Acknowledgement
-Made with love by [Michael Hamilton](http://hamblest.one).
+Made with love by [Mike Hamilton](http://miska.me).
